@@ -1,0 +1,118 @@
+create database testing;
+
+use testing;
+
+drop table if exists Answer;
+
+drop table if exists Question;
+
+drop table if exists Student;
+
+drop table if exists StudentAnswer;
+
+drop table if exists Subject;
+
+drop table if exists Test;
+
+drop table if exists Tutor;
+
+/*==============================================================*/
+/* Table: Answer                                                */
+/*==============================================================*/
+create table Answer
+(
+   IDAnswer             integer not null,
+   IDQuestion           integer,
+   Text                 varchar(200),
+   Correct              boolean,
+   primary key (IDAnswer)
+);
+
+/*==============================================================*/
+/* Table: Question                                              */
+/*==============================================================*/
+create table Question
+(
+   IDQuestion           integer not null,
+   IDTest               integer,
+   Text                 varchar(300),
+   OneAnswer            boolean,
+   primary key (IDQuestion)
+);
+
+/*==============================================================*/
+/* Table: Student                                               */
+/*==============================================================*/
+create table Student
+(
+   IDStudent            integer not null,
+   FirstName            varchar(35),
+   SecondName           varchar(35),
+   MiddleName           varchar(35),
+   login                char(10),
+   password             char(10),
+   primary key (IDStudent)
+);
+
+/*==============================================================*/
+/* Table: StudentAnswer                                         */
+/*==============================================================*/
+create table StudentAnswer
+(
+   IDStudent            integer,
+   IDAnswer             integer
+);
+
+/*==============================================================*/
+/* Table: Subject                                               */
+/*==============================================================*/
+create table Subject
+(
+   IDSubject            integer not null,
+   SubjectName          varchar(35),
+   primary key (IDSubject)
+);
+
+/*==============================================================*/
+/* Table: Test                                                  */
+/*==============================================================*/
+create table Test
+(
+   IDTest               integer not null,
+   IDSubject            integer,
+   IDTutor              integer,
+   Ready                boolean,
+   primary key (IDTest)
+);
+
+/*==============================================================*/
+/* Table: Tutor                                                 */
+/*==============================================================*/
+create table Tutor
+(
+   IDTutor              integer not null,
+   FirstName            varchar(35),
+   SecondName           varchar(35),
+   MiddleName           varchar(35),
+   login                char(10),
+   password             char(10),
+   primary key (IDTutor)
+);
+
+alter table Answer add constraint FK_Answer_Question foreign key (IDQuestion)
+      references Question (IDQuestion) on delete restrict on update restrict;
+
+alter table Question add constraint FK_Question_Test foreign key (IDTest)
+      references Test (IDTest) on delete restrict on update restrict;
+
+alter table StudentAnswer add constraint FK_StudentAnswer_Answer foreign key (IDAnswer)
+      references Answer (IDAnswer) on delete restrict on update restrict;
+
+alter table StudentAnswer add constraint FK_StudentAnswer_Studend foreign key (IDStudent)
+      references Student (IDStudent) on delete restrict on update restrict;
+
+alter table Test add constraint FK_Test_Subject foreign key (IDSubject)
+      references Subject (IDSubject) on delete restrict on update restrict;
+
+alter table Test add constraint FK_Test_Tutor foreign key (IDTutor)
+      references Tutor (IDTutor) on delete restrict on update restrict;
